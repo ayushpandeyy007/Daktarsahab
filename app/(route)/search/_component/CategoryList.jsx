@@ -43,9 +43,7 @@ const CategoryList = () => {
               categoryList.map((item, index) => (
                 <CommandItem key={index}>
                   <Link
-                    href={`/search/${encodeURIComponent(
-                      item?.attributes?.Name
-                    )}`}
+                    href={`/search/${encodeURIComponent(item.attributes.Name)}`}
                     className={`p-2 flex gap-2 text-[14px] items-center text-blue-600 rounded-md cursor-pointer w-full ${
                       category === decodeURIComponent(item.attributes.Name)
                         ? "bg-blue-100"

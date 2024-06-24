@@ -5,28 +5,29 @@ import React, { useEffect, useState } from "react";
 
 const Search = ({ params }) => {
   const [doctorList, setDoctorList] = useState([]);
+  const categoryName = decodeURIComponent(params.cname);
 
   useEffect(() => {
-    console.log("Category changed:", params.cname);
+    console.log("Category changed:", categoryName);
     getDoctors();
-  }, [params.cname]);
+  }, [categoryName]);
 
   const getDoctors = () => {
-    GlobalAPI.getDoctorByCategory(params.cname)
+    GlobalAPI.getDoctorByCategory(categoryName)
       .then((resp) => {
-        console.log(`API response for ${params.cname}:`, resp.data);
+        console.log(`API response for ${categoryName}:`, resp.data);
         if (resp?.data?.data) {
           setDoctorList(resp.data.data);
         }
       })
       .catch((error) => {
-        console.error(`Error fetching doctors for ${params.cname}:`, error);
+        console.error(`Error fetching doctors for ${categoryName}:`, error);
       });
   };
 
   return (
     <div className="mt-5">
-      <DoctorList heading={params.cname} doctorList={doctorList} />
+      <DoctorList heading={categoryName} doctorList={doctorList} />
     </div>
   );
 };
