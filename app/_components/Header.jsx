@@ -1,6 +1,10 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { LoginLink, LogoutLink, useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import {
+  LoginLink,
+  LogoutLink,
+  useKindeBrowserClient,
+} from "@kinde-oss/kinde-auth-nextjs";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect } from "react";
@@ -9,8 +13,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-
-
 
 function Header() {
   const Menu = [
@@ -51,36 +53,44 @@ function Header() {
           ))}
         </ul>
       </div>
-      {user ? 
-        
+      {user ? (
         <Popover>
-        <PopoverTrigger><Image src={user?.picture} alt='profile-image'
-        width={50}
-        height={50}
-        className="rounded-full"/></PopoverTrigger>
-        <PopoverContent className='w-44'>
-          <ul className='flex flex-col gap-2'>
-            <li className="cursor-pointer
-             hover:bg-slate-100 p-2 rounded-md">
-              Profile
-            </li>
-            <li lassName="cursor-pointer
-             hover:bg-slate-100 p-2 rounded-md">
-                My Bookings           
-                 </li>
-            <li lassName="cursor-pointer
-             hover:bg-slate-100 p-2 rounded-md">
-              <LogoutLink><Button variant="outline">Log out</Button>
-         </LogoutLink>
-            </li>
-          </ul>
-        </PopoverContent>
-      </Popover>
-       : 
+          <PopoverTrigger>
+            <Image
+              src={user?.picture}
+              alt="profile-image"
+              width={50}
+              height={50}
+              className="rounded-full"
+            />
+          </PopoverTrigger>
+          <PopoverContent className="w-44">
+            <ul className="flex flex-col gap-2">
+              <li
+                className="cursor-pointer
+             hover:bg-slate-100 p-2 rounded-md"
+              >
+                Profile
+              </li>
+              <li
+                className="cursor-pointer
+             hover:bg-slate-100 p-2 rounded-md"
+              >
+                My Bookings
+              </li>
+              <LogoutLink>
+                <li className="cursor-pointer hover:bg-slate-100 p-2 rounded-md">
+                  Logout
+                </li>
+              </LogoutLink>
+            </ul>
+          </PopoverContent>
+        </Popover>
+      ) : (
         <LoginLink>
           <Button>Get Started</Button>
         </LoginLink>
-      }
+      )}
     </div>
   );
 }
