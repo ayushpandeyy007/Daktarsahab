@@ -56,35 +56,38 @@ function BookAppointment({ doctor }) {
   };
 
   const saveBooking = () => {
-  return new Promise((resolve, reject) => {
-    const data = {
-      data: {
-        UserName: user.given_name + " " + user.family_name,
-        Email: user.email,
-        Time: selectedTimeSlot,
-        Date: date,
-        doctor: doctor.id,
-        Note: note,
-      },
-    };
+    return new Promise((resolve, reject) => {
+      const data = {
+        data: {
+          UserName: user.given_name + " " + user.family_name,
+          Email: user.email,
+          Time: selectedTimeSlot,
+          Date: date,
+          doctor: doctor.id,
+          Note: note,
+        },
+      };
 
-    GlobalAPI.bookAppointment(data)
-      .then((resp) => {
-        console.log(resp);
-        if (resp) {
-          toast("Booking confirmation Email will be sent to your mail");
-          resolve(true);
-        } else {
-          reject(new Error("Booking failed"));
-        }
-      })
-      .catch((error) => {
-        console.error("Booking failed:", error);
-        toast("Booking failed. Please try again.");
-        reject(error);
-      });
-  });
-};
+      GlobalAPI.bookAppointment(data)
+        .then((resp) => {
+          console.log(resp);
+          if (resp) {
+            GlobalAPI.sendEmail(data).then((resp) => {
+              console.log(resp);
+            });
+            toast("Booking confirmation Email will be sent to your mail");
+            resolve(true);
+          } else {
+            reject(new Error("Booking failed"));
+          }
+        })
+        .catch((error) => {
+          console.error("Booking failed:", error);
+          toast("Booking failed. Please try again.");
+          reject(error);
+        });
+    });
+  };
 
   return (
     <Dialog>

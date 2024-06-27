@@ -7,7 +7,7 @@ const DoctorSuggestionList = ({doctor, doctorList }) => {
     <div className="px-4">
       <div>
         <h2 className="font-bold text-[22px] mt-[-29px] mb-3">Suggestions</h2>
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 w-[300px]">
           {doctorList.length > 0
             ? doctorList.map((doctor, index) => (
                 <div
