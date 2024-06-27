@@ -21,9 +21,15 @@ const DoctorList = ({ doctorList, heading = "Popular Doctors" }) => {
                   className="h-[200px] w-full object-cover rounded-lg"
                 />
                 <div className="mt-3 items-baseline flex flex-col gap-1">
-                  <h2 className="text-[10px] bg-blue-100 px-2 p-1 rounded-full text-primary">
-                    {doctor?.attributes?.categories?.data[0]?.attributes?.Name}
-                  </h2>
+                  {doctor?.attributes?.categories?.data[0]?.attributes
+                    ?.Name && (
+                    <h2 className="text-[10px] bg-blue-100 px-2 p-1 rounded-full text-primary">
+                      {
+                        doctor?.attributes?.categories?.data[0]?.attributes
+                          ?.Name
+                      }
+                    </h2>
+                  )}
                   <h2 className="font-bold">{doctor.attributes?.Name}</h2>
                   <h2 className="text-primary text-sm">
                     {doctor.attributes?.Year_of_Experience}
@@ -31,7 +37,7 @@ const DoctorList = ({ doctorList, heading = "Popular Doctors" }) => {
                   <h2 className="text-gray-500 text-sm">
                     {doctor.attributes?.Address}
                   </h2>
-                  <Link href={"/details/" +doctor?.id} className="w-full">
+                  <Link href={"/details/" + doctor?.id} className="w-full">
                     <h2 className="p-2 px-3 border border-primary text-primary rounded-full w-full text-center text-[11px] mt-2 cursor-pointer hover:bg-primary hover:text-white">
                       Book Now
                     </h2>
