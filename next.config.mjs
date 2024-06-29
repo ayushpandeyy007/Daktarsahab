@@ -9,6 +9,7 @@ const nextConfig = {
       "lh3.googleusercontent.com",
       "gravatar.com",
     ],
+    unoptimized: true,
   },
   compiler: {
     removeConsole: process.env.NODE_ENV !== "development",
