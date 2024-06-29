@@ -22,7 +22,7 @@ function Header() {
   const MenuItems = [
     { id: 1, name: "Home", path: "/" },
     { id: 2, name: "Explore", path: "/explore" },
-    { id: 3, name: "Contact Us", path: "/" },
+    { id: 3, name: "Contact Us", path: "/contact" },
   ];
 
   useEffect(() => {
@@ -30,13 +30,13 @@ function Header() {
   }, [user]);
 
   return (
-    <header className="bg-white shadow-md">
+    <header className="bg-white shadow-md p-3">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4 md:justify-start md:space-x-10">
           <div className="flex justify-start lg:w-0 lg:flex-1">
             <Link href="/">
               <Image
-                src="/logo.svg"
+                src="/logo.png"
                 alt="logo"
                 width={180}
                 height={80}
@@ -58,7 +58,7 @@ function Header() {
               <Link
                 key={item.id}
                 href={item.path}
-                className="text-base font-medium text-gray-500 hover:text-gray-900"
+                className="text-lg font-medium text-gray-500 hover:text-gray-900"
               >
                 {item.name}
               </Link>
@@ -66,30 +66,31 @@ function Header() {
           </nav>
           <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
             {user ? (
-              <div className="flex items-center space-x-4">
-                <span className="text-sm font-medium text-gray-700">
+              <div className="flex items-center space-x-6">
+                <span className="text-lg font-medium text-gray-700 ">
                   Welcome, {user.given_name}
                 </span>
                 <Popover className="relative">
                   <PopoverTrigger>
-                    <div className="flex items-center space-x-3 bg-gray-100 rounded-full pl-3 pr-1 py-1 cursor-pointer hover:bg-gray-200 transition-colors duration-200">
-                      <span className="text-sm font-medium text-gray-700">
+                    <div className="flex items-center space-x-4 bg-gray-100 rounded-full pl-4 pr-2 py-2 cursor-pointer hover:bg-gray-200 transition-colors duration-200">
+                      <span className="text-lg font-medium  text-gray-700 ">
                         {user.given_name} {user.family_name}
                       </span>
+
                       <Image
-                        src={user?.picture || "/default-avatar.png"}
+                        src={user?.picture}
                         alt="profile"
-                        width={32}
-                        height={32}
-                        className="rounded-full"
+                        width={40}
+                        height={40}
+                        className="rounded-full "
                       />
                     </div>
                   </PopoverTrigger>
-                  <PopoverContent className="absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                  <PopoverContent className=" right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                     <div className="py-1">
                       <Link
                         href="/myprofile"
-                        className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200"
+                        className="flex items-center px-4 py-2 text-lg text-gray-700 hover:bg-gray-100 transition-colors duration-200"
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -107,7 +108,7 @@ function Header() {
                       </Link>
                       <Link
                         href="/my-booking"
-                        className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200"
+                        className="flex items-center px-4 py-2 text-lg text-gray-700 hover:bg-gray-100 transition-colors duration-200"
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -123,7 +124,7 @@ function Header() {
                         </svg>
                         My Bookings
                       </Link>
-                      <LogoutLink className="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors duration-200">
+                      <LogoutLink className="flex items-center px-4 py-2 text-lg text-red-600 hover:bg-red-50 transition-colors duration-200">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           className="h-5 w-5 mr-2 text-red-500"
@@ -144,7 +145,7 @@ function Header() {
               </div>
             ) : (
               <LoginLink>
-                <Button className="whitespace-nowrap inline-flex items-center justify-center px-6 py-2 border border-transparent rounded-full shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-colors duration-200">
+                <Button className="whitespace-nowrap inline-flex items-center justify-center px-6 py-2 border border-transparent rounded-full shadow-sm text-lg font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-colors duration-200">
                   Get Started
                 </Button>
               </LoginLink>
@@ -153,7 +154,6 @@ function Header() {
         </div>
       </div>
 
-      {/* Drawer */}
       {/* Drawer */}
       {isDrawerOpen && (
         <>
@@ -175,7 +175,7 @@ function Header() {
                   <X className="h-5 w-5 text-gray-600" />
                 </Button>
                 <Image
-                  src="/logo.svg"
+                  src="/logo.png"
                   alt="logo"
                   width={120}
                   height={40}
@@ -187,7 +187,7 @@ function Header() {
                   <Link
                     key={item.id}
                     href={item.path}
-                    className="block py-3 px-4 mb-2 rounded-lg text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
+                    className="block py-3 px-4 mb-2 rounded-lg text-lg text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
                     onClick={() => setIsDrawerOpen(false)}
                   >
                     <span className="text-lg font-medium">{item.name}</span>
@@ -206,28 +206,31 @@ function Header() {
                         className="rounded-full mr-4"
                       />
                       <div>
-                        <p className="font-semibold text-gray-800">
+                        <p className="font-semibold text-lg text-gray-800">
                           {user.given_name} {user.family_name}
                         </p>
-                        <p className="text-sm text-gray-500">{user.email}</p>
+                        <p className="text-base text-gray-500">{user.email}</p>
                       </div>
                     </div>
                     <Link
                       href="/profile"
-                      className="block py-2 px-4 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors"
+                      className="block py-2 px-4 rounded-lg text-lg text-gray-700 hover
+transition-colors"
                       onClick={() => setIsDrawerOpen(false)}
                     >
                       Profile
                     </Link>
                     <Link
                       href="/my-booking"
-                      className="block py-2 px-4 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors"
+                      className="block py-2 px-4 rounded-lg text-lg text-gray-700 hover
+transition-colors"
                       onClick={() => setIsDrawerOpen(false)}
                     >
                       My Bookings
                     </Link>
                     <LogoutLink
-                      className="block py-2 px-4 rounded-lg text-red-600 hover:bg-red-50 transition-colors"
+                      className="block py-2 px-4 rounded-lg text-lg text-red-600 hover
+transition-colors"
                       onClick={() => setIsDrawerOpen(false)}
                     >
                       Logout
@@ -236,7 +239,8 @@ function Header() {
                 ) : (
                   <LoginLink>
                     <Button
-                      className="w-full flex items-center justify-center px-4 py-3 rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 transition-colors"
+                      className="w-full flex items-center justify-center px-4 py-3 rounded-lg text-lg text-white bg-indigo-600 hover
+transition-colors"
                       onClick={() => setIsDrawerOpen(false)}
                     >
                       Get Started

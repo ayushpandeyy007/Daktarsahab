@@ -12,8 +12,6 @@ import {
 } from "@react-email/components";
 import * as React from "react";
 
-
-
 const baseUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
   : "http://localhost:3000";
@@ -27,7 +25,7 @@ export const EmailTemplate = ({ userFirstname = "Ayushs" }) => (
     <Body style={main}>
       <Container style={container}>
         <Img
-          src={`${baseUrl}/logo.svg`}
+          src={`${baseUrl}/logo.png`}
           width="170"
           height="50"
           alt="Koala"
@@ -57,8 +55,6 @@ export const EmailTemplate = ({ userFirstname = "Ayushs" }) => (
   </Html>
 );
 
-
-
 export default EmailTemplate;
 
 const main = {
@@ -82,7 +78,7 @@ const paragraph = {
 };
 
 const btnContainer = {
-  textAlign: "center"  ,
+  textAlign: "center",
 };
 
 const button = {
@@ -91,7 +87,7 @@ const button = {
   color: "#fff",
   fontSize: "16px",
   textDecoration: "none",
-  textAlign: "center"  ,
+  textAlign: "center",
   display: "block",
   padding: "12px",
 };

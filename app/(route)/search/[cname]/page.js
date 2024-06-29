@@ -32,14 +32,19 @@ const Search = ({ params }) => {
   };
 
   return (
-    <div className=" mt-5 p-4">
-      <h1 className="text-2xl font-bold mb-4 text-gray-800">
+    <div className="mt-5 p-4">
+      <h1 className="text-3xl font-bold mb-6 text-gray-800 border-b pb-2">
         {categoryName} Doctors
       </h1>
       {isLoading ? (
-        <div className="text-center py-10">Loading...</div>
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-500"></div>
+        </div>
       ) : (
-        <DoctorList heading={categoryName} doctorList={doctorList} />
+        <DoctorList
+          heading={`${categoryName} Specialists`}
+          doctorList={doctorList}
+        />
       )}
     </div>
   );
