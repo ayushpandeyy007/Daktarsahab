@@ -26,7 +26,7 @@ function Details({ params }) {
   }, [params.recordId]); // Trigger effect whenever recordId changes
 
   return (
-    <div className="p-5 md:px-20">
+    <div className="bg-gray-100 p-5 md:px-20">
       <h2 className="font-bold text-[22px]">Details</h2>
       <div className="grid grid-cols-1 md:grid-cols-4">
         {/* Doctor Detail */}

@@ -11,7 +11,7 @@ import {
   DialogTrigger,
   DialogClose,
 } from "@/components/ui/dialog";
-import { CalendarDays, Clock } from "lucide-react"; // Import Clock from lucide-react
+import { CalendarDays, Clock } from "lucide-react";
 import {
   useKindeAuth,
   useKindeBrowserClient,
@@ -25,34 +25,95 @@ function BookAppointment({ doctor }) {
   const [selectedTimeSlot, setSelectedTimeSlot] = useState("");
   const { user } = useKindeBrowserClient();
   const [note, setNote] = useState("");
+  const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
+  const [isPaymentComplete, setIsPaymentComplete] = useState(false);
 
   useEffect(() => {
     getTime();
+    checkPaymentStatus();
   }, []);
 
   const getTime = () => {
     const timeList = [];
     for (let i = 10; i <= 12; i++) {
-      timeList.push({
-        time: i + ":00 AM",
-      });
-      timeList.push({
-        time: i + ":30 AM",
-      });
+      timeList.push({ time: i + ":00 AM" });
+      timeList.push({ time: i + ":30 AM" });
     }
     for (let i = 1; i <= 6; i++) {
-      timeList.push({
-        time: i + ":00 PM",
-      });
-      timeList.push({
-        time: i + ":30 PM",
-      });
+      timeList.push({ time: i + ":00 PM" });
+      timeList.push({ time: i + ":30 PM" });
     }
     setTimeSlot(timeList);
   };
 
+  const checkPaymentStatus = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const paymentStatus = urlParams.get("paymentStatus");
+
+    if (paymentStatus === "complete") {
+      setIsPaymentComplete(true);
+      setIsPaymentProcessing(false);
+      toast("Payment completed successfully!");
+
+      // Remove the paymentStatus parameter from the URL
+      const newUrl = window.location.pathname;
+      window.history.replaceState({}, document.title, newUrl);
+    }
+  };
+
   const isPastDay = (day) => {
-    return day < new Date().setHours(0, 0, 0, 0); // Ensure to compare only the date part
+    return day < new Date().setHours(0, 0, 0, 0);
+  };
+
+  const generateFonepayParams = async () => {
+    const PID = "fonepay123"; // Your Fonepay merchant ID
+    const sharedSecretKey = "fonepay"; // Your Fonepay secret key
+    const PRN = `PRN${Date.now()}${Math.random().toString(36).substring(2, 7)}`;
+    const MD = "P";
+    const AMT = "100"; // Replace with actual appointment cost
+    const CRN = "NPR";
+    const DT = date.toLocaleDateString("en-US", {
+      month: "2-digit",
+      day: "2-digit",
+      year: "numeric",
+    });
+    const R1 = note || "Appointment Booking";
+    const R2 = selectedTimeSlot || "N/A";
+    const RU = `http://localhost:3000/payment-successful`; // Return to the same page
+
+    const message = `${PID},${MD},${PRN},${AMT},${CRN},${DT},${R1},${R2},${RU}`;
+
+    // Convert the message and key to Uint8Array
+    const encoder = new TextEncoder();
+    const data = encoder.encode(message);
+    const key = encoder.encode(sharedSecretKey);
+
+    // Create the HMAC
+    const cryptoKey = await window.crypto.subtle.importKey(
+      "raw",
+      key,
+      { name: "HMAC", hash: "SHA-512" },
+      false,
+      ["sign"]
+    );
+    const signature = await window.crypto.subtle.sign("HMAC", cryptoKey, data);
+
+    // Convert the signature to hex string
+    const DV = Array.from(new Uint8Array(signature))
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("");
+
+    return { PID, PRN, MD, AMT, CRN, DT, R1, R2, RU, DV };
+  };
+
+  const initiatePayment = async () => {
+    setIsPaymentProcessing(true);
+    const params = await generateFonepayParams();
+    const paymentUrl = "https://dev-clientapi.fonepay.com/api/merchantRequest"; // Use production URL in production
+    const queryString = new URLSearchParams(params).toString();
+
+    // Redirect to the payment URL
+    window.location.href = `${paymentUrl}?${queryString}`;
   };
 
   const saveBooking = () => {
@@ -71,9 +132,9 @@ function BookAppointment({ doctor }) {
       GlobalAPI.bookAppointment(data)
         .then((resp) => {
           console.log(resp);
-          if (resp) {
-            GlobalAPI.sendEmail(data).then((resp) => {
-              console.log(resp);
+          if (resp && resp.status === 200) {
+            GlobalAPI.sendEmail(data).then((emailResp) => {
+              console.log(emailResp);
             });
             toast("Booking confirmation Email will be sent to your mail");
             resolve(true);
@@ -87,6 +148,18 @@ function BookAppointment({ doctor }) {
           reject(error);
         });
     });
+  };
+
+  const handleBookingAndPayment = async () => {
+    try {
+      setIsPaymentProcessing(true);
+      await saveBooking();
+      await initiatePayment();
+    } catch (error) {
+      console.error("Error during booking or payment:", error);
+      toast("An error occurred. Please try again.");
+      setIsPaymentProcessing(false);
+    }
   };
 
   return (
@@ -111,7 +184,7 @@ function BookAppointment({ doctor }) {
                     selected={date}
                     onSelect={setDate}
                     disabled={isPastDay}
-                    className="rounded-md border "
+                    className="rounded-md border"
                   />
                 </div>
                 {/* Time slot */}
@@ -168,12 +241,17 @@ function BookAppointment({ doctor }) {
               Close
             </Button>
           </DialogClose>
+
           <Button
-            onClick={() => saveBooking()}
+            onClick={handleBookingAndPayment}
             type="button"
-            disabled={!(date && selectedTimeSlot)}
+            disabled={isPaymentProcessing || isPaymentComplete}
           >
-            Submit
+            {isPaymentProcessing
+              ? "Processing..."
+              : isPaymentComplete
+              ? "Booking Completed"
+              : "Book and Pay"}
           </Button>
         </DialogFooter>
       </DialogContent>
