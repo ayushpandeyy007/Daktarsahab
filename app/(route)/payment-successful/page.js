@@ -1,12 +1,38 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { FaCheckCircle, FaHome } from "react-icons/fa";
 import { motion } from "framer-motion";
+import GlobalAPI from "@/app/_utils/GlobalAPI";
+import { toast } from "sonner";
 
 const SuccessfulPayment = () => {
   const router = useRouter();
+
+  useEffect(() => {
+    sendConfirmationEmail();
+  }, []);
+
+  const sendConfirmationEmail = () => {
+    // Retrieve booking data from localStorage
+    const bookingData = JSON.parse(localStorage.getItem("bookingData"));
+
+    if (bookingData) {
+      GlobalAPI.sendEmail(bookingData)
+        .then((emailResp) => {
+          console.log(emailResp);
+          toast("Booking confirmation email has been sent to your mail");
+        })
+        .catch((error) => {
+          console.error("Failed to send email:", error);
+          toast("Failed to send confirmation email. Please contact support.");
+        });
+
+      // Clear the booking data from localStorage
+      localStorage.removeItem("bookingData");
+    }
+  };
 
   const handleViewDoctors = () => {
     router.push("/");

@@ -79,7 +79,7 @@ function BookAppointment({ doctor }) {
     });
     const R1 = note || "Appointment Booking";
     const R2 = selectedTimeSlot || "N/A";
-    const RU = `http://localhost:3000/payment-successful`; // Return to the same page
+    const RU = process.env.NEXT_PUBLIC_PAYMENT_RETURN_URL; // Return to the same page
 
     const message = `${PID},${MD},${PRN},${AMT},${CRN},${DT},${R1},${R2},${RU}`;
 
@@ -133,10 +133,6 @@ function BookAppointment({ doctor }) {
         .then((resp) => {
           console.log(resp);
           if (resp && resp.status === 200) {
-            GlobalAPI.sendEmail(data).then((emailResp) => {
-              console.log(emailResp);
-            });
-            toast("Booking confirmation Email will be sent to your mail");
             resolve(true);
           } else {
             reject(new Error("Booking failed"));
@@ -154,6 +150,20 @@ function BookAppointment({ doctor }) {
     try {
       setIsPaymentProcessing(true);
       await saveBooking();
+
+      // Store booking data in localStorage before initiating payment
+      const bookingData = {
+        data: {
+          UserName: user.given_name + " " + user.family_name,
+          Email: user.email,
+          Time: selectedTimeSlot,
+          Date: date,
+          doctor: doctor.id,
+          Note: note,
+        },
+      };
+      localStorage.setItem("bookingData", JSON.stringify(bookingData));
+
       await initiatePayment();
     } catch (error) {
       console.error("Error during booking or payment:", error);
