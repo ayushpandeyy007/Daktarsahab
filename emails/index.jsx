@@ -16,39 +16,51 @@ const baseUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
   : "http://localhost:3000";
 
-export const EmailTemplate = ({ userFirstname = "Ayushs" }) => (
+export const EmailTemplate = ({
+  patientName = "Ayush",
+  appointmentDate = "July 20, 2024",
+  appointmentTime = "2:30 PM",
+}) => (
   <Html>
     <Head />
-    <Preview>
-      The sales intelligence platform that helps you uncover qualified leads.
-    </Preview>
+    <Preview>Your appointment with DaktarSahab has been confirmed.</Preview>
     <Body style={main}>
       <Container style={container}>
-        <Img
-          src={`${baseUrl}/logo.png`}
-          width="170"
-          height="50"
-          alt="Koala"
-          style={logo}
-        />
-        <Text style={paragraph}>Hi {userFirstname},</Text>
+        <h1>DaktarSahab</h1>
+        <Text style={paragraph}>Dear {patientName},</Text>
         <Text style={paragraph}>
-          Welcome to Koala, the sales intelligence platform that helps you
-          uncover qualified leads and close deals faster.
+          Your appointment with DaktarSahab has been successfully booked. We're
+          looking forward to providing you with excellent healthcare service.
+        </Text>
+        <Text style={paragraph}>
+          Appointment Details:
+          <br />
+          Date: {appointmentDate}
+          <br />
+          Time: {appointmentTime}
         </Text>
         <Section style={btnContainer}>
-          <Button style={button} href="https://getkoala.com">
-            Get started
+          <Button
+            style={button}
+            href="https://daktarsahab.vercel.app/my-booking"
+          >
+            View Appointment
           </Button>
         </Section>
         <Text style={paragraph}>
-          Best,
+          If you need to reschedule or cancel your appointment, please do so at
+          least 24 hours in advance.
+        </Text>
+        <Text style={paragraph}>
+          Best regards,
           <br />
-          The Koala team
+          The DaktarSahab Team
         </Text>
         <Hr style={hr} />
         <Text style={footer}>
-          470 Noor Ave STE B #1148, South San Francisco, CA 94080
+          DaktarSahab - meet and treat
+          <br />
+          Kathmandu, Nepal
         </Text>
       </Container>
     </Body>
@@ -82,7 +94,7 @@ const btnContainer = {
 };
 
 const button = {
-  backgroundColor: "#5F51E8",
+  backgroundColor: "#007bff",
   borderRadius: "3px",
   color: "#fff",
   fontSize: "16px",
