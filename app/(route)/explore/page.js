@@ -6,9 +6,8 @@ import Image from "next/image";
 import CategorySearch from "@/app/_components/CategorySearch";
 
 const ExplorePage = () => {
-
   return (
-    <div className=" bg-gray-100">
+    <div className="mt-10 bg-gray-100">
       <CategorySearch />
     </div>
   );

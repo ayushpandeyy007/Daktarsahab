@@ -50,7 +50,6 @@ const ContactPage = () => {
     }
   };
 
-
   return (
     <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto">
@@ -111,7 +110,7 @@ const ContactPage = () => {
                 value={formData.contact}
                 onChange={handleChange}
                 required
-                className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                className="w-full rounded-md border border-gray-200 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
               ></textarea>
             </div>
             <div>
@@ -129,11 +128,9 @@ const ContactPage = () => {
             Other Ways to Reach Us
           </h2>
           <div className="space-y-2">
-            <p className="text-gray-600">Email: support@example.com</p>
-            <p className="text-gray-600">Phone: +1 (555) 123-4567</p>
-            <p className="text-gray-600">
-              Address: 123 Healthcare Ave, Medical City, HC 12345
-            </p>
+            <p className="text-gray-600">Email: daktarsahab@gmail.com</p>
+            <p className="text-gray-600">Phone: +977 9800000000</p>
+            <p className="text-gray-600">Address: Kathmandu, Nepal</p>
           </div>
         </div>
       </div>

@@ -5,26 +5,26 @@ const teamMembers = [
   {
     name: "Ayush Pandey",
     role: "Frontend Developer",
-    image: "/team-member-1.jpg",
-    description: "Frontend Developer",
+    image: "/Ayush.png",
+    description: "Hi, I am Ayush",
   },
   {
     name: "Nissant Timilsina",
-    role: "Frontend Developer",
-    image: "/team-member-2.jpg",
-    description: "Frontend Developer",
+    role: "Project Manager + DevOps",
+    image: "/Nissant.png",
+    description: "Hi, I am Nissant",
   },
   {
     name: "Rakshya Basnet",
-    role: "Frontend Developer",
-    image: "/team-member-3.jpg",
-    description: "Frontend Developer",
+    role: "Backend Developer",
+    image: "/Rakshya.png",
+    description: "Hi, I am Rakshya",
   },
   {
     name: "Ritamvara thapa",
-    role: "Frontend Developer",
-    image: "/team-member-4.jpg",
-    description: "Frontend Developer",
+    role: "UI/UX + DevOps",
+    image: "/Ritamvara.png",
+    description: "Hi, I am Ritamavara",
   },
 ];
 

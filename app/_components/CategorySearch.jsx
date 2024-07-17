@@ -33,7 +33,7 @@ function CategorySearch() {
   };
 
   const filterCategories = () => {
-    const filtered = categoryList.filter((category) =>
+    const filtered = categoryList?.filter((category) =>
       category.attributes.Name.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredCategories(filtered);
@@ -73,8 +73,8 @@ function CategorySearch() {
         </div>
 
         <div className="  grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-          {filteredCategories.length > 0 ? (
-            filteredCategories.map((item) => (
+          {filteredCategories?.length > 0 ? (
+            filteredCategories?.map((item) => (
               <Link
                 href={`/search/${encodeURIComponent(item.attributes.Name)}`}
                 key={item.id}
@@ -101,7 +101,7 @@ function CategorySearch() {
                 </div>
               </Link>
             ))
-          ) : categoryList.length > 0 ? (
+          ) : categoryList?.length > 0 ? (
             <p className="col-span-full text-center text-lg text-gray-600">
               No categories found matching your search.
             </p>

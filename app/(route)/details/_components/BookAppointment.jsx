@@ -146,7 +146,53 @@ function BookAppointment({ doctor }) {
     });
   };
 
+  const validateBookingData = () => {
+    // UserName validation
+    if (!user.given_name || !user.family_name) {
+      toast("Please provide your full name.");
+      return false;
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!user.email || !emailRegex.test(user.email)) {
+      toast("Please provide a valid email address.");
+      return false;
+    }
+
+    // Time slot validation
+    if (!selectedTimeSlot) {
+      toast("Please select a time slot.");
+      return false;
+    }
+
+    // Date validation
+    if (!date || isPastDay(date)) {
+      toast("Please select a valid future date.");
+      return false;
+    }
+
+    // Doctor validation
+    if (!doctor || !doctor.id) {
+      toast("Invalid doctor selection.");
+      return false;
+    }
+
+    // Note validation (optional)
+    if (note && note.length > 500) {
+      // Assuming a max length of 500 characters
+      toast("Note is too long. Please keep it under 500 characters.");
+      return false;
+    }
+
+    return true;
+  };
+
   const handleBookingAndPayment = async () => {
+    if (!validateBookingData()) {
+      return; // Stop the process if validation fails
+    }
+
     try {
       setIsPaymentProcessing(true);
       await saveBooking();
@@ -175,7 +221,9 @@ function BookAppointment({ doctor }) {
   return (
     <Dialog>
       <DialogTrigger>
-        <Button className="mt-3 rounded-full">Book Appointment</Button>
+        <Button className="mt-3 bg-indigo-600 rounded-full">
+          Book Appointment
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

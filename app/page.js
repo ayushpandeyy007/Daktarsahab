@@ -21,7 +21,7 @@ export default function Home() {
   };
 
   return (
-    <div className="space-y-12 px-4 md:px-8 lg:px-16 py-8">
+    <div className="space-y-12  px-4 md:px-8 lg:px-16 py-8">
       <Hero />
       <CategorySearch />
       <DoctorList doctorList={doctorList} />

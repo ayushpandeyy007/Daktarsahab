@@ -3,45 +3,68 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <footer className="bg-blue-100">
+    <footer className="mt-10 md:h-[600px] bg-gradient-to-br from-blue-50 to-indigo-100">
       <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="flex justify-center text-teal-600">
-          <Image src="/logo.png" alt="DaktarSahab Logo" width={200} height={100} />
+          <Image
+            src="/logo.png"
+            alt="DaktarSahab Logo"
+            width={200}
+            height={100}
+          />
         </div>
 
         <p className="mx-auto mt-6 max-w-md text-center leading-relaxed text-gray-500">
-          DaktarSahab: Your trusted platform for easy and efficient doctor appointments.
-          Book, manage, and stay healthy with just a few clicks.
+          DaktarSahab: Your trusted platform for easy and efficient doctor
+          appointments. Book, manage, and stay healthy with just a few clicks.
         </p>
 
         <ul className="mt-12 flex flex-wrap justify-center gap-6 md:gap-8 lg:gap-12">
           <li>
-            <a className="text-blue-700 transition hover:text-blue-700/75" href="#">
+            <a
+              className="text-blue-700 transition hover:text-blue-700/75"
+              href="#"
+            >
               Find a Doctor
             </a>
           </li>
           <li>
-            <a className="text-blue-700 transition hover:text-blue-700/75" href="#">
+            <a
+              className="text-blue-700 transition hover:text-blue-700/75"
+              href="#"
+            >
               Our Services
             </a>
           </li>
           <li>
-            <a className="text-blue-700 transition hover:text-blue-700/75" href="#">
+            <a
+              className="text-blue-700 transition hover:text-blue-700/75"
+              href="#"
+            >
               Health Articles
             </a>
           </li>
           <li>
-            <a className="text-blue-700 transition hover:text-blue-700/75" href="#">
+            <a
+              className="text-blue-700 transition hover:text-blue-700/75"
+              href="#"
+            >
               About Us
             </a>
           </li>
           <li>
-            <a className="text-blue-700 transition hover:text-blue-700/75" href="#">
+            <a
+              className="text-blue-700 transition hover:text-blue-700/75"
+              href="#"
+            >
               Contact
             </a>
           </li>
           <li>
-            <a className="text-blue-700 transition hover:text-blue-700/75" href="#">
+            <a
+              className="text-blue-700 transition hover:text-blue-700/75"
+              href="#"
+            >
               FAQs
             </a>
           </li>

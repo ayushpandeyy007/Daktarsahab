@@ -8,7 +8,7 @@ const DoctorSuggestionList = ({ doctorList }) => {
     <div className="px-4  bg-gray-100 ">
       <h2 className="font-bold text-2xl mb-6">Suggestions</h2>
       <div className="grid grid-cols-1  gap-6">
-        {doctorList.length > 0
+        {doctorList?.length > 0
           ? doctorList.map((doctor) => (
               <div
                 key={doctor.id}
