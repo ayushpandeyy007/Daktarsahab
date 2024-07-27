@@ -3,12 +3,13 @@ const { default: axios } = require("axios");
 const API_KEY = process.env.NEXT_PUBLIC_STRAPI_API_KEY;
 
 const axiosClient = axios.create({
-  baseURL: "https://doctor-appointment-admin-y94n.onrender.com/api",
+  baseURL: "https://doctor-appointment-admin-y94n.onrender.com/api", //http://localhost:1337/admin  https://doctor-appointment-admin-y94n.onrender.com/api
   headers: {
     Authorization: `Bearer ${API_KEY}`,
   },
 });
 
+console.log(API_KEY,'rg4tg4tg4');
 const getCategory = () => axiosClient.get("/categories?populate=*");
 const getDoctorList = () => axiosClient.get("/doctors?populate=*");
 const getDoctorByCategory = (category) =>
@@ -18,6 +19,7 @@ const getDoctorByCategory = (category) =>
 const getDoctorById = (id) => axiosClient.get("/doctors/" + id + "?populate=*");
 const bookAppointment = (data) => axiosClient.post("/appointments", data);
 const sendEmail = (data) => axios.post("/api/sendEmail", data);
+const sendRating = (data) => axios.post("/ratings", data);
 
 const getUserBookingList = (userEmail) =>
   axiosClient.get(
@@ -36,4 +38,5 @@ export default {
   sendEmail,
   getUserBookingList,
   deleteBooking,
+  sendRating,
 };

@@ -5,16 +5,16 @@ import { CalendarDays, MapPin, Star } from "lucide-react";
 
 const DoctorSuggestionList = ({ doctorList }) => {
   return (
-    <div className="px-4  bg-gray-100 ">
+    <div className="px-10 mt-[-35px]  bg-gray-100  w-[350px] ">
       <h2 className="font-bold text-2xl mb-6">Suggestions</h2>
       <div className="grid grid-cols-1  gap-6">
         {doctorList?.length > 0
           ? doctorList.map((doctor) => (
               <div
                 key={doctor.id}
-                className=" flex flex-col justify-center items-center align-middle bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
+                className=" flex flex-col justify-center items-center align-middle bg-white rounded-xl  shadow-lg hover:shadow-xl transition-shadow duration-300"
               >
-          <div className="relative">
+                <div className="relative">
                   <Image
                     src={
                       doctor?.attributes?.image?.data?.attributes?.url ||
@@ -25,7 +25,6 @@ const DoctorSuggestionList = ({ doctorList }) => {
                     height={96}
                     alt="doctor-image"
                   />
-                  
                 </div>
                 <div className="p-6 space-y-4">
                   <h3 className="text-2xl font-bold text-gray-900">

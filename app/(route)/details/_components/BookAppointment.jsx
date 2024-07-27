@@ -19,7 +19,7 @@ import {
 import GlobalAPI from "@/app/_utils/GlobalAPI";
 import { Toaster, toast } from "sonner";
 
-function BookAppointment({ doctor }) {
+function BookAppointment({ doctor, timeAndDate }) {
   const [date, setDate] = useState(new Date());
   const [timeSlot, setTimeSlot] = useState([]);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState("");
@@ -63,6 +63,19 @@ function BookAppointment({ doctor }) {
 
   const isPastDay = (day) => {
     return day < new Date().setHours(0, 0, 0, 0);
+  };
+
+  const isPastHour = (time) => {
+    const now = new Date();
+    const [hour, period] = time.split(" ");
+    let [hours, minutes] = hour.split(":").map(Number);
+    if (period === "PM" && hours < 12) hours += 12;
+    if (period === "AM" && hours === 12) hours = 0;
+
+    const appointmentDate = new Date(date);
+    appointmentDate.setHours(hours, minutes);
+
+    return appointmentDate < now;
   };
 
   const generateFonepayParams = async () => {
@@ -131,7 +144,6 @@ function BookAppointment({ doctor }) {
 
       GlobalAPI.bookAppointment(data)
         .then((resp) => {
-          console.log(resp);
           if (resp && resp.status === 200) {
             resolve(true);
           } else {
@@ -185,6 +197,30 @@ function BookAppointment({ doctor }) {
       return false;
     }
 
+    // Check if the selected time slot is already booked on the same date
+    const isTimeSlotBooked = timeAndDate.data.some((item) => {
+      const itemDate = new Date(item.attributes.Date).toLocaleDateString();
+      const selectedDate = date.toLocaleDateString();
+      return (
+        item.attributes.Time === selectedTimeSlot && itemDate === selectedDate
+      );
+    });
+
+    if (isTimeSlotBooked) {
+      toast(
+        "The selected time slot is already booked for this date. Please choose another time."
+      );
+      return false;
+    }
+
+    // Check if the selected time slot is in the past
+    if (isPastHour(selectedTimeSlot)) {
+      toast(
+        "The selected time slot is in the past. Please choose a valid time."
+      );
+      return false;
+    }
+
     return true;
   };
 
@@ -219,101 +255,110 @@ function BookAppointment({ doctor }) {
   };
 
   return (
-    <Dialog>
-      <DialogTrigger>
-        <Button className="mt-3 bg-indigo-600 rounded-full">
-          Book Appointment
-        </Button>
-      </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Book Appointment</DialogTitle>
-          <DialogDescription>
-            <div>
-              <div className="grid grid-cols-1 md:grid-cols-2 mt-5">
-                {/* Calendar */}
-                <div className="flex flex-col gap-3 items-baseline">
-                  <h2 className="flex gap-3 items-center">
-                    <CalendarDays className="text-primary h-5 w-5" />
-                    Select Date
-                  </h2>
-                  <Calendar
-                    mode="single"
-                    selected={date}
-                    onSelect={setDate}
-                    disabled={isPastDay}
-                    className="rounded-md border"
-                  />
-                </div>
-                {/* Time slot */}
-                <div className="mt-3 md:mt-0">
-                  <h2 className="flex gap-2 items-center mb-3">
-                    <Clock className="text-primary h-5 w-5" />
-                    Select Time Slot
-                  </h2>
-                  <div className="grid grid-cols-3 gap-2 border rounded-lg p-5">
-                    {timeSlot?.map((item, index) => (
-                      <h2
-                        onClick={() => setSelectedTimeSlot(item.time)}
-                        key={index}
-                        className={`p-2 border cursor-pointer text-center hover:bg-primary hover:text-white rounded-full ${
-                          item.time === selectedTimeSlot
-                            ? "bg-primary text-white"
-                            : ""
-                        }`}
-                      >
-                        {item.time}
-                      </h2>
-                    ))}
+    <div>
+      <Dialog>
+        <DialogTrigger>
+          <Button className="mt-3 bg-indigo-600 rounded-full">
+            Book Appointment
+          </Button>
+        </DialogTrigger>
+        <DialogContent className="w-11/12 max-w-[90vw] md:max-w-[600px] lg:max-w-[800px] h-auto max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-semibold">
+              Book Appointment
+            </DialogTitle>
+            <DialogDescription>
+              <div className="mt-4">
+                <div className="flex flex-col md:flex-row gap-4">
+                  {/* Calendar */}
+                  <div className="w-full md:w-1/2">
+                    <h2 className="flex gap-2 items-center mb-2 text-lg font-medium">
+                      <CalendarDays className="text-primary h-5 w-5" />
+                      Select Date
+                    </h2>
+                    <Calendar
+                      mode="single"
+                      selected={date}
+                      onSelect={setDate}
+                      disabled={isPastDay}
+                      className="rounded-md border w-full"
+                    />
+                  </div>
+                  {/* Time slot */}
+                  <div className="w-full md:w-1/2">
+                    <h2 className="flex gap-2 items-center mb-2 text-lg font-medium">
+                      <Clock className="text-primary h-5 w-5" />
+                      Select Time Slot
+                    </h2>
+                    <div className="grid grid-cols-3 gap-2 border rounded-lg p-3 max-h-[200px] overflow-y-auto">
+                      {timeSlot?.map((item, index) => (
+                        <button
+                          onClick={() => setSelectedTimeSlot(item.time)}
+                          key={index}
+                          className={`p-2 text-sm border rounded-full hover:bg-primary hover:text-white transition-colors ${
+                            item.time === selectedTimeSlot
+                              ? "bg-primary text-white"
+                              : "bg-white text-gray-800"
+                          } ${
+                            isPastHour(item.time)
+                              ? "bg-gray-300 cursor-not-allowed"
+                              : ""
+                          }`}
+                          disabled={isPastHour(item.time)}
+                        >
+                          {item.time}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </DialogDescription>
-        </DialogHeader>
-        <div>
-          <label
-            htmlFor="note"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Note:
-          </label>
-          <textarea
-            name="Note"
-            id="note"
-            rows={4}
-            cols={67}
-            className="border-2 mt-1 p-1"
-            placeholder="Enter your note here..."
-            value={note}
-            onChange={(e) => setNote(e.target.value)}
-          ></textarea>
-        </div>
-        <DialogFooter className="sm:justify-end items-center">
-          <DialogClose asChild>
-            <Button
-              type="button"
-              variant="secondary"
-              className="text-red-500 border border-red-500"
+            </DialogDescription>
+          </DialogHeader>
+          <div className="mt-4">
+            <label
+              htmlFor="note"
+              className="block text-sm font-medium text-gray-700 mb-1"
             >
-              Close
+              Note:
+            </label>
+            <textarea
+              name="Note"
+              id="note"
+              rows={3}
+              className="w-full border-2 rounded-md p-2 text-sm"
+              placeholder="Enter your note here..."
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
+            ></textarea>
+          </div>
+          <DialogFooter className="mt-6 flex flex-col sm:flex-row gap-3 justify-end">
+            <DialogClose asChild>
+              <Button
+                type="button"
+                variant="secondary"
+                className="w-full sm:w-auto border border-gray-300"
+              >
+                Close
+              </Button>
+            </DialogClose>
+            <Button
+              onClick={handleBookingAndPayment}
+              type="button"
+              disabled={isPaymentProcessing || isPaymentComplete}
+              className="w-full sm:w-auto bg-primary text-white"
+            >
+              {isPaymentProcessing
+                ? "Processing..."
+                : isPaymentComplete
+                ? "Booking Completed"
+                : "Book and Pay"}
             </Button>
-          </DialogClose>
-
-          <Button
-            onClick={handleBookingAndPayment}
-            type="button"
-            disabled={isPaymentProcessing || isPaymentComplete}
-          >
-            {isPaymentProcessing
-              ? "Processing..."
-              : isPaymentComplete
-              ? "Booking Completed"
-              : "Book and Pay"}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      <Toaster />
+    </div>
   );
 }
 

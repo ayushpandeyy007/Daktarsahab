@@ -23,11 +23,19 @@ const MyBooking = () => {
   };
 
   const filterUserBooking = (type) => {
-    return bookingList.filter((item) =>
-      type === "upcoming"
-        ? new Date(item.attributes.Date) >= new Date()
-        : new Date(item.attributes.Date) < new Date()
-    );
+    const now = new Date();
+    now.setHours(0, 0, 0, 0); // Set to the start of today
+
+    return bookingList.filter((item) => {
+      const bookingDate = new Date(item.attributes.Date);
+      bookingDate.setHours(0, 0, 0, 0); // Set to the start of the booking day
+
+      if (type === "upcoming") {
+        return bookingDate >= now;
+      } else {
+        return bookingDate < now;
+      }
+    });
   };
 
   return (
